@@ -1,4 +1,4 @@
-//Daniel and Kathleen- Final Project3
+//Daniel and Kathleen- General Election Mode
 #include <LiquidCrystal.h>
 #include <LCDKeypad.h>
 
@@ -8,23 +8,16 @@ LiquidCrystal lcd(8, 13, 9, 4, 5, 6, 7); //set up LCD screen
 String players[2] = {"Republican", "Democrat"};
 String states[51] = {"AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY","DC"};
 int electoralVotes[51] = {9,3,11,6,55,9,7,3,29,16,4,4,20,11,6,6,8,8,4,10,11,16,10,6,10,3,5,6,4,14,5,29,15,3,18,7,7,20,4,9,3,11,38,6,3,13,12,5,10,3,3};
-int repDelegates[51] = {27,51,29,44,172,28,34,36,19,71,16,28,95,42,28,40,58,9,66,9,72,52,69,99,19,9,29,9,40,59,32,19,23,23,46,40,37,49,155,58,43,38,42,76,40,50,30,50,23,30,57};
-int demDelegates[51] = {60,20,85,37,546,79,70,31,246,116,34,27,182,92,52,37,60,59,30,118,116,147,93,41,84,27,30,43,32,142,4,291,121,23,159,42,74,210,33,59,25,76,252,37,26,110,118,37,96,18,45};
+
 int sensorPin = A4;
 int sensorValue = 0; 
 int outPin = 2; 
 int redPin = 12;
-int bluePin = 11;       
+int bluePin = 11; 
+      
 bool upButton;
 bool downButton;
 bool selectButton;
-int numPlayers;
-
-bool buttonPressed;
-int capsense[51] = {0,1,2,3,12,6,9,10,0,1,2,3,12,6,9,10,0,1,2,3,12,6,9,10,0,1,2,3,12,6,9,10,0,1,2,3,12,6,9,10,0,1,2,3,12,6,9,10,0,1,2};
-#define BUZZER_1       400
-
-
 
 void setup() {
   lcd.begin(16, 2); //set up our 16x2 LCD screen
@@ -58,7 +51,7 @@ void loop() {
     lcd.scrollDisplayLeft();
     for (int a=0; a<2000; a++) {
       upButton = analogRead(0) == 931; //UP button being pushed is indicated by a reading of ~931 on analogRead(0);
-      downButton = analogRead(0) == 902; //DOWN button being pushed is indicated by a reading of ~902 on analogRead(0);
+      downButton = analogRead(0) == 903; //DOWN button being pushed is indicated by a reading of ~903 on analogRead(0);
     }
   }
   lcd.clear();
@@ -72,7 +65,7 @@ void loop() {
     lcd.scrollDisplayLeft();
     for (int a=0; a<2000; a++) {
       upButton = analogRead(0) == 931; //UP button being pushed is indicated by a reading of ~931 on analogRead(0);
-      downButton = analogRead(0) == 902; //DOWN button being pushed is indicated by a reading of ~902 on analogRead(0);
+      downButton = analogRead(0) == 903; //DOWN button being pushed is indicated by a reading of ~903 on analogRead(0);
     }
   }
   staticPrintToLCD("UP = 2 Players");
@@ -80,7 +73,7 @@ void loop() {
   lcd.print("DOWN = >2 Players");
   while(!upButton && !downButton) { //wait for player to press button to select game mode
     upButton = analogRead(0) == 931; //UP button being pushed is indicated by a reading of ~931 on analogRead(0);
-    downButton = analogRead(0) == 902; //DOWN button being pushed is indicated by a reading of ~902 on analogRead(0);
+    downButton = analogRead(0) == 903; //DOWN button being pushed is indicated by a reading of ~903 on analogRead(0);
   }
   if (upButton) {
     //GENERAL ELECTION MODE
@@ -92,7 +85,7 @@ void loop() {
     int electoralScore[2] = {0,0};
     boolean first = random(2); //randomly choose one player to go first
     int order[2] = {first, !first}; //make array containing order of players
-    for(int i=0; i<2; i++){ //loop through all the states + DC ---CHANGE THIS FOR NUMBER OF STATES YOU WANT TO HAVE
+    for(int i=9; i<12; i++){ //loop through all the states + DC ---CHANGE THIS FOR NUMBER OF STATES YOU WANT TO HAVE
       String state = states[i]; //this is the state for this turn
       scrollPrintToLCD("This turn, you'll get votes in " + state);
       
@@ -102,10 +95,10 @@ void loop() {
         scrollPrintToLCD("Press SELECT when you remove ballot");
         delay(500);
         
-        buttonPressed = false; 
+        selectButton = false; 
         int iter = 0;
-        while (!buttonPressed && iter < 120){ //waits for the SELECT button to be pressed or for it to time out
-          buttonPressed = analogRead(0) == 613; //checks if SELECT button pressed
+        while (!selectButton && iter < 120){ //waits for the SELECT button to be pressed or for it to time out
+          selectButton = analogRead(0) == 613; //checks if SELECT button pressed
           sensorValue = analogRead(sensorPin);
           turnScore[j] -= sensorValue; //subtract from players score if they hit the edge of the ballot hole
           staticPrintToLCD("VOTES: " + String(turnScore[j])); //display score
@@ -118,7 +111,7 @@ void loop() {
           iter++; //keep track of how long they're taking
         }
         turnScore[j] -= iter; //subtract votes for how long they're taking
-        if(buttonPressed){
+        if(selectButton){
           turnScore[j] += 1000; // +1000 votes if successfully remove ballot
         } else {
           turnScore[j] = 0; //0 votes if they didn't remove ballot (timed out)
