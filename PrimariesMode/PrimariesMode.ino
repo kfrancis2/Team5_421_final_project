@@ -1,4 +1,4 @@
-p//Daniel and Kathleen- Primaries Mode
+//Daniel and Kathleen- Primaries Mode
 #include <LiquidCrystal.h>
 #include <LCDKeypad.h>
 
