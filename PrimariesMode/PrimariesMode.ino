@@ -184,8 +184,6 @@ void loop() {
     }
   }
   staticPrintToLCD("FINAL SCORE:");
-  lcd.setCursor(0,1);
-  lcd.print("Popular Vote: ");
   delay(3000);
   for (int m=0; m<numPlayers; m++) {
     staticPrintToLCD("P" + String(m+1) + " Votes:" + String(score[m]));
