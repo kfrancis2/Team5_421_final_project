@@ -101,7 +101,7 @@ void loop() {
   }
   int delegateCount[numPlayers];    
   int turnScore[numPlayers];
-  for(int i=0; i<2; i++){ //loop through all the states + DC
+  for(int i=0; i<51; i++){ //loop through all the states + DC
     state = String(states[i]); //this is the state for this turn
     staticPrintToLCD("This turn you'll");
     lcd.setCursor(0,1);

@@ -85,7 +85,7 @@ void loop() {
     int electoralScore[2] = {0,0};
     boolean first = random(2); //randomly choose one player to go first
     int order[2] = {first, !first}; //make array containing order of players
-    for(int i=9; i<12; i++){ //loop through all the states + DC ---CHANGE THIS FOR NUMBER OF STATES YOU WANT TO HAVE
+    for(int i=0; i<51; i++){ //loop through all the states + DC
       String state = states[i]; //this is the state for this turn
       scrollPrintToLCD("This turn, you'll get votes in " + state);
       
@@ -217,6 +217,7 @@ void loop() {
   } else if (downButton) {
     //PRIMARY MODE --------------------------------------------------------------------------
     scrollPrintToLCD("You chose Primaries Mode!"); // can only scroll through 40 characters at a time; so messages are split up into short phrases
+    //The arduino got SUPER buggy when we tried to put both modes in one sketch, so we separated them into two sketches.
   }
   lcd.clear();
   lcd.setCursor(0,0);
